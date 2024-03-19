@@ -1,0 +1,33 @@
+<form class="p-5 bg-light" [formGroup]="addPostForm">
+  <h2 class="text-center fs-4">Add Post</h2>
+  <!-- Content for post -->
+  <div class="form-outline mb-4">
+    <label class="mb-1 fw-bold" for="content">Post Content</label>
+    <input
+      type="text"
+      class="form-control"
+      id="content"
+      placeholder="Enter your post content.."
+      formControlName="content"
+    />
+  </div>
+  <div class="form-group">
+    <label for="imageUrl">Post Image </label>
+    <input
+      type="file"
+      class="form-control"
+      id="imageUrl"
+      accept="image/*"
+      (change)="onFileSelected($event)"
+    />
+    <img *ngIf="imageUrl" [src]="imageUrl" alt="Post Photo" class="preview-image" />
+  </div>
+
+  <div class="text-center text-lg-center mt-4 pt-2 align-items-center">
+    <button type="button" class="btn btn-secondary btn-md w-25" (click)="addPost()">Add</button>
+    <button class="btn btn-danger btn-md w-25 ms-3" (click)="close()">
+      Close
+      <i class="fa-sharp fa-solid fa-close"></i>
+    </button>
+  </div>
+</form>

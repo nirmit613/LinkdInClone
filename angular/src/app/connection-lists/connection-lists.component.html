@@ -1,0 +1,42 @@
+<div class="container" style="width: 100%">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <h2 class="mb-4 d-flex justify-content-center">LinkedIn Users</h2>
+      <div *ngIf="userList && userList.length > 0">
+        <div class="row">
+          <div *ngFor="let user of userList" class="col-md-6">
+            <div class="card mb-3">
+              <div class="card-body">
+                <h5 class="card-title">{{ user.userName }}</h5>
+                <p class="card-text">{{ user.email }}</p>
+                <button
+                  *ngIf="
+                    !isConnectionPending(user.id) &&
+                    !(isConnectionAccepted(user.id) || isConnectionRejected(user.id))
+                  "
+                  class="btn btn-outline-primary"
+                  (click)="connectUser(user.id)"
+                  [disabled]="isConnectionPending(user.id)"
+                >
+                  <i class="fa-solid fa-user me-1"></i>Connect
+                </button>
+                <p class="text-primary" *ngIf="isConnectionPending(user.id)">
+                  Connection request pending
+                </p>
+                <p class="text-success" *ngIf="isConnectionAccepted(user.id)">
+                  Connection request accepted
+                </p>
+                <p class="text-danger" *ngIf="isConnectionRejected(user.id)">
+                  Connection request rejected
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="!userList || userList.length === 0">
+        <p>No users available.</p>
+      </div>
+    </div>
+  </div>
+</div>
