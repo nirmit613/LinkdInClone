@@ -111,16 +111,23 @@ export class MyPostsComponent implements OnInit {
     }
   }
   public toggleCommentSection(post: IPost) {
-    post.showComments = !post.showComments;
-    if (post.showComments && !post.comments) {
-      this.likecommentService.getCommentsOfPost(post.id).subscribe({
-        next: res => {
-          post.comments = res.data;
-        },
-        error: error => {
-          console.log('Error fetching comments: ', error);
-        },
-      });
+    if (post.showComments) {
+      post.showComments = false;
+      post.isAddingComment = false;
+    } else {
+      post.showComments = true;
+      post.isAddingComment = true;
+
+      if (!post.comments) {
+        this.likecommentService.getCommentsOfPost(post.id).subscribe({
+          next: res => {
+            post.comments = res.data;
+          },
+          error: error => {
+            console.log('Error fetching comments: ', error);
+          },
+        });
+      }
     }
   }
 

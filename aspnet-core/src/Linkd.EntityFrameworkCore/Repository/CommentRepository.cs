@@ -24,7 +24,7 @@ namespace Linkd.Repository
 
         public async Task<List<Comment>> GetCommentsForPostAsync(Guid postId)
         {
-            return await _context.Comments.Include(u=>u.User).Where(c => c.PostId == postId).ToListAsync();
+            return await _context.Comments.Include(u=>u.User).Where(c => c.PostId == postId).OrderByDescending(c=>c.CreationTime).ToListAsync();
         }
     }
 }

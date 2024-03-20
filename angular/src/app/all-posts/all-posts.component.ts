@@ -10,7 +10,6 @@ import { LikecommentService } from '../services/likecomment.service';
 })
 export class AllPostsComponent implements OnInit {
   public PostsList!: IPost[];
-
   constructor(private postService: PostService, private likecommentService: LikecommentService) {}
 
   ngOnInit(): void {
@@ -50,6 +49,7 @@ export class AllPostsComponent implements OnInit {
       });
     });
   }
+
   public toggleLike(post: IPost) {
     if (post.liked) {
       this.likecommentService.unLikePost(post.id).subscribe({
@@ -73,21 +73,30 @@ export class AllPostsComponent implements OnInit {
       });
     }
   }
+
   public toggleCommentSection(post: IPost) {
-    post.showComments = !post.showComments;
-    if (post.showComments && !post.comments) {
-      this.likecommentService.getCommentsOfPost(post.id).subscribe({
-        next: res => {
-          post.comments = res.data;
-        },
-        error: error => {
-          console.log('Error fetching comments: ', error);
-        },
-      });
+    if (post.showComments) {
+      post.showComments = false;
+      post.isAddingComment = false;
+    } else {
+      post.showComments = true;
+      post.isAddingComment = true;
+
+      if (!post.comments) {
+        this.likecommentService.getCommentsOfPost(post.id).subscribe({
+          next: res => {
+            post.comments = res.data;
+          },
+          error: error => {
+            console.log('Error fetching comments: ', error);
+          },
+        });
+      }
     }
   }
-
+  
   public addComment(post: IPost, content: string) {
+    post.isAddingComment = true;
     this.likecommentService.addComment({ postId: post.id, content }).subscribe({
       next: () => {
         post.newComment = '';
@@ -95,15 +104,19 @@ export class AllPostsComponent implements OnInit {
         this.likecommentService.getCommentsOfPost(post.id).subscribe({
           next: res => {
             post.comments = res.data;
+            post.showComments = true;
+            post.isAddingComment = true;
             console.log(post.comments);
           },
           error: error => {
             console.log('Error fetching comments: ', error);
+            post.isAddingComment = false;
           },
         });
       },
       error: error => {
         console.log('Error adding comment: ', error);
+        post.isAddingComment = false;
       },
     });
   }

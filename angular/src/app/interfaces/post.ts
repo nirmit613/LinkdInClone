@@ -12,4 +12,5 @@ export interface IPost {
   showComments?: boolean;
   newComment?: string;
   comments?: Comment[];
+  isAddingComment?: boolean;
 }

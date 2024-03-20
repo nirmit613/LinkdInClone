@@ -134,7 +134,7 @@ namespace Linkd.Services
             return response;
         }
         public async Task<ResponseDto> AddConnectionRequest(Guid connection)
-        {
+            {
             var response = new ResponseDto();
             try
             {
